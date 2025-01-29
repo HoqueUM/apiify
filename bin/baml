@@ -1,0 +1,6 @@
+#!/bin/bash
+cd ..
+rm -rf baml_client
+rm -rf baml_src
+baml-cli init
+baml-cli generate
