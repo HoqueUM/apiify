@@ -16,7 +16,7 @@ response = client.chat.completions.create(
 content = response.choices[0].message.content
 print(content.split('>')[2].strip())
 
-content = content.split('>')[2].strip()
+content = content.split('>')[-1].strip()
 country_info = b.ExtractCountryCapital(content)
 print(f"Country: {country_info.country}")
 print(f"Capital: {country_info.capital}")
