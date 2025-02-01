@@ -39,9 +39,15 @@ def all_succeeded(checks: Dict[CheckName, Check]) -> bool:
 
 
 
-class CountryCapital(BaseModel):
-    country: str
-    capital: str
+class Article(BaseModel):
+    tile: str
+    date: str
+    author: str
+    summary: str
+    content: str
+
+class PageData(BaseModel):
+    model_config = ConfigDict(extra='allow')
 
 class Resume(BaseModel):
     name: str

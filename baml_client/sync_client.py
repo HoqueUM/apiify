@@ -47,11 +47,11 @@ class BamlSyncClient:
       return self.__stream_client
 
     
-    def ExtractCountryCapital(
+    def ExtractArticle(
         self,
-        text: str,
+        article: str,
         baml_options: BamlCallOptions = {},
-    ) -> types.CountryCapital:
+    ) -> types.Article:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
         tb = __tb__._tb # type: ignore (we know how to use this private attribute)
@@ -60,15 +60,38 @@ class BamlSyncClient:
       __cr__ = baml_options.get("client_registry", None)
 
       raw = self.__runtime.call_function_sync(
-        "ExtractCountryCapital",
+        "ExtractArticle",
         {
-          "text": text,
+          "article": article,
         },
         self.__ctx_manager.get(),
         tb,
         __cr__,
       )
-      return cast(types.CountryCapital, raw.cast_to(types, types))
+      return cast(types.Article, raw.cast_to(types, types, partial_types, False))
+    
+    def ExtractPageData(
+        self,
+        input: str,
+        baml_options: BamlCallOptions = {},
+    ) -> types.PageData:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      raw = self.__runtime.call_function_sync(
+        "ExtractPageData",
+        {
+          "input": input,
+        },
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+      return cast(types.PageData, raw.cast_to(types, types, partial_types, False))
     
     def ExtractResume(
         self,
@@ -91,7 +114,7 @@ class BamlSyncClient:
         tb,
         __cr__,
       )
-      return cast(types.Resume, raw.cast_to(types, types))
+      return cast(types.Resume, raw.cast_to(types, types, partial_types, False))
     
 
 
@@ -105,11 +128,11 @@ class BamlStreamClient:
       self.__ctx_manager = ctx_manager
 
     
-    def ExtractCountryCapital(
+    def ExtractArticle(
         self,
-        text: str,
+        article: str,
         baml_options: BamlCallOptions = {},
-    ) -> baml_py.BamlSyncStream[partial_types.CountryCapital, types.CountryCapital]:
+    ) -> baml_py.BamlSyncStream[partial_types.Article, types.Article]:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
         tb = __tb__._tb # type: ignore (we know how to use this private attribute)
@@ -118,9 +141,9 @@ class BamlStreamClient:
       __cr__ = baml_options.get("client_registry", None)
 
       raw = self.__runtime.stream_function_sync(
-        "ExtractCountryCapital",
+        "ExtractArticle",
         {
-          "text": text,
+          "article": article,
         },
         None,
         self.__ctx_manager.get(),
@@ -128,10 +151,40 @@ class BamlStreamClient:
         __cr__,
       )
 
-      return baml_py.BamlSyncStream[partial_types.CountryCapital, types.CountryCapital](
+      return baml_py.BamlSyncStream[partial_types.Article, types.Article](
         raw,
-        lambda x: cast(partial_types.CountryCapital, x.cast_to(types, partial_types)),
-        lambda x: cast(types.CountryCapital, x.cast_to(types, types)),
+        lambda x: cast(partial_types.Article, x.cast_to(types, types, partial_types, True)),
+        lambda x: cast(types.Article, x.cast_to(types, types, partial_types, False)),
+        self.__ctx_manager.get(),
+      )
+    
+    def ExtractPageData(
+        self,
+        input: str,
+        baml_options: BamlCallOptions = {},
+    ) -> baml_py.BamlSyncStream[partial_types.PageData, types.PageData]:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      raw = self.__runtime.stream_function_sync(
+        "ExtractPageData",
+        {
+          "input": input,
+        },
+        None,
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+
+      return baml_py.BamlSyncStream[partial_types.PageData, types.PageData](
+        raw,
+        lambda x: cast(partial_types.PageData, x.cast_to(types, types, partial_types, True)),
+        lambda x: cast(types.PageData, x.cast_to(types, types, partial_types, False)),
         self.__ctx_manager.get(),
       )
     
@@ -160,8 +213,8 @@ class BamlStreamClient:
 
       return baml_py.BamlSyncStream[partial_types.Resume, types.Resume](
         raw,
-        lambda x: cast(partial_types.Resume, x.cast_to(types, partial_types)),
-        lambda x: cast(types.Resume, x.cast_to(types, types)),
+        lambda x: cast(partial_types.Resume, x.cast_to(types, types, partial_types, True)),
+        lambda x: cast(types.Resume, x.cast_to(types, types, partial_types, False)),
         self.__ctx_manager.get(),
       )
     

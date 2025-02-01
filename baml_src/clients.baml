@@ -35,11 +35,10 @@ client<llm> CustomHaiku {
   }
 }
 
-client<llm> Deepseek {
-  provider "openai-generic"
+client<llm> Llama {
+  provider "ollama"
   options {
-    base_url "http://localhost:11434/v1"
-    model "deepseek-r1"
+    model "llama3.2:1b"
     api_key "ollama"
   }
 }

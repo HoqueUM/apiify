@@ -16,7 +16,7 @@
 import baml_py
 from enum import Enum
 from pydantic import BaseModel, ConfigDict
-from typing import Dict, List, Optional, Union, Literal
+from typing import Dict, Generic, List, Optional, TypeVar, Union, Literal
 
 from . import types
 from .types import Checked, Check
@@ -28,10 +28,21 @@ from .types import Checked, Check
 #
 ###############################################################################
 
+T = TypeVar('T')
+class StreamState(BaseModel, Generic[T]):
+    value: T
+    state: Literal["Pending", "Incomplete", "Complete"]
 
-class CountryCapital(BaseModel):
-    country: Optional[str] = None
-    capital: Optional[str] = None
+
+class Article(BaseModel):
+    tile: Optional[str] = None
+    date: Optional[str] = None
+    author: Optional[str] = None
+    summary: Optional[str] = None
+    content: Optional[str] = None
+
+class PageData(BaseModel):
+    model_config = ConfigDict(extra='allow')
 
 class Resume(BaseModel):
     name: Optional[str] = None
