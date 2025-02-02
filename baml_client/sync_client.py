@@ -72,7 +72,7 @@ class BamlSyncClient:
     
     def ExtractPageData(
         self,
-        input: str,
+        parts: List[str],HTML: str,
         baml_options: BamlCallOptions = {},
     ) -> types.PageData:
       __tb__ = baml_options.get("tb", None)
@@ -85,7 +85,7 @@ class BamlSyncClient:
       raw = self.__runtime.call_function_sync(
         "ExtractPageData",
         {
-          "input": input,
+          "parts": parts,"HTML": HTML,
         },
         self.__ctx_manager.get(),
         tb,
@@ -160,7 +160,7 @@ class BamlStreamClient:
     
     def ExtractPageData(
         self,
-        input: str,
+        parts: List[str],HTML: str,
         baml_options: BamlCallOptions = {},
     ) -> baml_py.BamlSyncStream[partial_types.PageData, types.PageData]:
       __tb__ = baml_options.get("tb", None)
@@ -173,7 +173,8 @@ class BamlStreamClient:
       raw = self.__runtime.stream_function_sync(
         "ExtractPageData",
         {
-          "input": input,
+          "parts": parts,
+          "HTML": HTML,
         },
         None,
         self.__ctx_manager.get(),

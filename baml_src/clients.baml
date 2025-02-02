@@ -8,6 +8,16 @@ client<llm> CustomGPT4o {
   }
 }
 
+client<llm> Mistral {
+  provider "openai-generic"
+  options {
+    base_url "https://api.mistral.ai/v1"
+    safe_prompt true
+    model "mistral-large-latest"
+    api_key env.MISTRAL_API_KEY
+  }
+}
+
 client<llm> CustomGPT4oMini {
   provider openai
   retry_policy Exponential
@@ -36,9 +46,16 @@ client<llm> CustomHaiku {
 }
 
 client<llm> Llama {
+  provider "openai-generic"
+  options {
+    base_url "http://localhost:11434/v1"
+  }
+}
+
+client<llm> Wizard {
   provider "ollama"
   options {
-    model "llama3.2:1b"
+    model "wizardlm2"
     api_key "ollama"
   }
 }
