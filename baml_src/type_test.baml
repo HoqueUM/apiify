@@ -10,7 +10,9 @@ class Metadata {
         The HTML tag that contains the content.
         "#)
     content string @description(#"
-        The content of the HTML tag.
+        The content of the HTML tag. This should not be HTML.
+        This should be the content that is visible to the user.
+        It should align with the part.
         "#)
     attributes Atrribute[]
 }
@@ -42,6 +44,9 @@ function ExtractPageData(parts: string[], HTML: string) -> PageData {
         4. Prioritize elements with identifying attributes (e.g., class, id) that are directly related to the content.
         5. If a part is not found, attempt to interpret what the most likely content would be. Otherwise, leave it blank.
         6. If multiple elements match, choose the most logical option.
+        7. Pretend that you are extracting this data for a database using some 
+              kind of web scraping tool. It is necessary to to keep it clean
+              and accurate. Do not overly generalize the content.
 
         HTML Source:
         {{ HTML }}
@@ -63,7 +68,11 @@ function FilterPageData(parts: string[], HTML: string) -> Metadata[] {
 
         Instructions:
         1. Extract as many values as you can.
-        2. If a part is not found, leave it blank.
+        2. Be as specific as possible. Do not leave the content portion as HTML.
+        3. If a part is not found, leave it blank.
+        4. Pretend that you are extracting this data for a database using some 
+              kind of web scraping tool. It is necessary to to keep it clean
+              and accurate. Do not overly generalize the content.
 
         HTML Source:
         {{ HTML }}
