@@ -13,10 +13,11 @@ client<llm> Mistral {
   options {
     base_url "https://api.mistral.ai/v1"
     safe_prompt true
-    model "mistral-large-latest"
+    model "ft:open-mistral-7b:b4c3b5c2:20250202:57e1b64f"
     api_key env.MISTRAL_API_KEY
   }
 }
+
 
 client<llm> CustomGPT4oMini {
   provider openai

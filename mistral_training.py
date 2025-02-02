@@ -10,6 +10,18 @@
 
 from mistralai import Mistral
 import os
+import json
+import dotenv
+dotenv.load_dotenv()
+
+# lines = []
+# with open("ultrachat_chunk_train.jsonl") as file:
+#     for line in file:
+#         lines.append(json.loads(line))
+#     json.dump(lines, open("ultrachat_chunk_train.jsonl", "w"), indent=4) 
+
+# data = json.loads("ultrachat_chunk_train.jsonl")
+# print(data)
 
 api_key = os.environ["MISTRAL_API_KEY"]
 
@@ -17,9 +29,9 @@ client = Mistral(api_key=api_key)
 
 ultrachat_chunk_train = client.files.upload(file={
     "file_name": "ultrachat_chunk_train.jsonl",
-    "content": open("ultrachat_chunk_train.jsonl", "rb"),
+    "content": open("website_html_dataset.jsonl", "rb"),
 })
-ultrachat_chunk_eval = client.files.upload(file={
-    "file_name": "ultrachat_chunk_eval.jsonl",
-    "content": open("ultrachat_chunk_eval.jsonl", "rb"),
-})
+# ultrachat_chunk_eval = client.files.upload(file={
+#     "file_name": "ultrachat_chunk_eval.jsonl",
+#     "content": open("ultrachat_chunk_eval.jsonl", "rb"),
+# })

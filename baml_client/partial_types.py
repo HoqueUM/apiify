@@ -35,11 +35,21 @@ class StreamState(BaseModel, Generic[T]):
 
 
 class Article(BaseModel):
-    tile: Optional[str] = None
+    title: Optional[str] = None
     date: Optional[str] = None
     author: Optional[str] = None
     summary: Optional[str] = None
     content: Optional[str] = None
+
+class Atrribute(BaseModel):
+    attribute: Optional[str] = None
+    value: Optional[str] = None
+
+class Metadata(BaseModel):
+    part: Optional[str] = None
+    tag: Optional[str] = None
+    content: Optional[str] = None
+    attributes: List["Atrribute"]
 
 class PageData(BaseModel):
     model_config = ConfigDict(extra='allow')

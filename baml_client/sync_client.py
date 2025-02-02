@@ -116,6 +116,29 @@ class BamlSyncClient:
       )
       return cast(types.Resume, raw.cast_to(types, types, partial_types, False))
     
+    def FilterPageData(
+        self,
+        parts: List[str],HTML: str,
+        baml_options: BamlCallOptions = {},
+    ) -> List[types.Metadata]:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      raw = self.__runtime.call_function_sync(
+        "FilterPageData",
+        {
+          "parts": parts,"HTML": HTML,
+        },
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+      return cast(List[types.Metadata], raw.cast_to(types, types, partial_types, False))
+    
 
 
 
@@ -216,6 +239,37 @@ class BamlStreamClient:
         raw,
         lambda x: cast(partial_types.Resume, x.cast_to(types, types, partial_types, True)),
         lambda x: cast(types.Resume, x.cast_to(types, types, partial_types, False)),
+        self.__ctx_manager.get(),
+      )
+    
+    def FilterPageData(
+        self,
+        parts: List[str],HTML: str,
+        baml_options: BamlCallOptions = {},
+    ) -> baml_py.BamlSyncStream[List[partial_types.Metadata], List[types.Metadata]]:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      raw = self.__runtime.stream_function_sync(
+        "FilterPageData",
+        {
+          "parts": parts,
+          "HTML": HTML,
+        },
+        None,
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+
+      return baml_py.BamlSyncStream[List[partial_types.Metadata], List[types.Metadata]](
+        raw,
+        lambda x: cast(List[partial_types.Metadata], x.cast_to(types, types, partial_types, True)),
+        lambda x: cast(List[types.Metadata], x.cast_to(types, types, partial_types, False)),
         self.__ctx_manager.get(),
       )
     

@@ -40,11 +40,21 @@ def all_succeeded(checks: Dict[CheckName, Check]) -> bool:
 
 
 class Article(BaseModel):
-    tile: str
+    title: str
     date: str
     author: str
     summary: str
     content: str
+
+class Atrribute(BaseModel):
+    attribute: str
+    value: str
+
+class Metadata(BaseModel):
+    part: str
+    tag: str
+    content: str
+    attributes: List["Atrribute"]
 
 class PageData(BaseModel):
     model_config = ConfigDict(extra='allow')

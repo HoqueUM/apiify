@@ -2,19 +2,72 @@ class PageData {
     @@dynamic
 }
 
+class Metadata {
+    part string @description(#"
+        The content part that was extracted.
+        "#)
+    tag string @description(#"
+        The HTML tag that contains the content.
+        "#)
+    content string @description(#"
+        The content of the HTML tag.
+        "#)
+    attributes Atrribute[]
+}
+
+class Atrribute {
+    attribute string @description(#"
+        The attributes of the HTML tag.
+        This could be class, id, href, etc.
+    "#)
+    value string @description(#"
+        The value of the attribute.
+    "#)
+}
+
 function ExtractPageData(parts: string[], HTML: string) -> PageData {
     client Mistral
     prompt #"
-        I would like help extract parts of this HTML. Not the content, but the actual HTML of the page.
-        Give me the exact HTML, as it is of these things:
+       Task: Extract exact HTML snippets containing specific content.
 
+        For each of the following content parts:
         {% for part in parts %}
-            {{part}} 
+        - {{part}}
         {% endfor %}
-        
-        From this HTML:
+
+        Instructions:
+        1. Extract the full HTML of that element, including its tags and all attributes.
+        2. Preserve the exact formatting, spacing, and attribute order as in the original HTML.
+        3. Choose the innermost element that fully encapsulates the required content.        
+        4. Prioritize elements with identifying attributes (e.g., class, id) that are directly related to the content.
+        5. If a part is not found, attempt to interpret what the most likely content would be. Otherwise, leave it blank.
+        6. If multiple elements match, choose the most logical option.
+
+        HTML Source:
         {{ HTML }}
 
+        {{ ctx.output_format }}
+
+    "#
+}
+
+function FilterPageData(parts: string[], HTML: string) -> Metadata[] {
+    client Mistral
+    prompt #"
+       Task: Extract data from this HTML.
+
+        For each of the following content parts:
+        {% for part in parts %}
+        - {{part}}
+        {% endfor %}
+
+        Instructions:
+        1. Extract as many values as you can.
+        2. If a part is not found, leave it blank.
+
+        HTML Source:
+        {{ HTML }}
+    
         {{ ctx.output_format }}
 
     "#
