@@ -50,7 +50,11 @@ function ExtractPageData(parts: string[], HTML: string) -> PageData {
 
         HTML Source:
         {{ HTML }}
-
+        Pretend that you are extracting this data for a database using some 
+              kind of web scraping tool. It is necessary to to keep it clean
+              and accurate. Do not overly generalize the content.
+        Do not hallucinate the HTML. Everything provided should be directly from what is given.
+        It is merely strctured. Pull directly from the provided HTML.
         {{ ctx.output_format }}
 
     "#
@@ -72,12 +76,48 @@ function FilterPageData(parts: string[], HTML: string) -> Metadata[] {
         3. If a part is not found, leave it blank.
         4. Pretend that you are extracting this data for a database using some 
               kind of web scraping tool. It is necessary to to keep it clean
-              and accurate. Do not overly generalize the content.
+              and accurate. Do not overly generalize the content. Additionally,
+              keep the list of metadata to only the length of the parts list and
+              only contains the metadata that is relevant to the parts list specified.
+        5. Try not to look at just HTML tags. There could be other attributes that are important.
 
         HTML Source:
         {{ HTML }}
-    
+        Pretend that you are extracting this data for a database using some 
+              kind of web scraping tool. It is necessary to to keep it clean
+              and accurate. Do not overly generalize the content. Additionally,
+              keep the list of metadata to only the length of the parts list and
+              only contains the metadata that is relevant to the parts list specified.
+        Ensure that the value of 'tag' is the tag that is directly related to the content.
+        Ensure that the value of 'content' is the content that is visible to the user.
+        Ensure that the value of 'attributes' is the attributes of the HTML tag.
+        Do not hallucinate the attributes, tags, or content. Pull directly from the provided HTML.
         {{ ctx.output_format }}
 
+    "#
+}
+
+function EnsureResults(results: Metadata[], output: string) -> Metadata[] {
+    client Mistral
+    prompt #"
+        Task: Esure that the results in the metadata are correct:
+        {% for result in results %}
+        - Part: {{result.part}}
+        - Tag: {{result.tag}}
+        - Content: {{result.content}}
+        - Attributes: 
+            {% for attribute in result.attributes %}
+            - Attribute: {{attribute.attribute}}
+            - Value: {{attribute.value}}
+            {% endfor %}
+        {% endfor %}
+        {{ output }}
+
+        1. They should be accurate and directly related to the content.
+        2. Everything listed should be directly from the provided HTML.
+        3. If the results are incorrect, please correct them. 
+        4. Do not hallucinate the attributes, tags, or content.
+
+        {{ ctx.output_format }}
     "#
 }

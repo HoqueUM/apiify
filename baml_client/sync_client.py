@@ -47,6 +47,29 @@ class BamlSyncClient:
       return self.__stream_client
 
     
+    def EnsureResults(
+        self,
+        results: List[types.Metadata],output: str,
+        baml_options: BamlCallOptions = {},
+    ) -> List[types.Metadata]:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      raw = self.__runtime.call_function_sync(
+        "EnsureResults",
+        {
+          "results": results,"output": output,
+        },
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+      return cast(List[types.Metadata], raw.cast_to(types, types, partial_types, False))
+    
     def ExtractArticle(
         self,
         article: str,
@@ -150,6 +173,37 @@ class BamlStreamClient:
       self.__runtime = runtime
       self.__ctx_manager = ctx_manager
 
+    
+    def EnsureResults(
+        self,
+        results: List[types.Metadata],output: str,
+        baml_options: BamlCallOptions = {},
+    ) -> baml_py.BamlSyncStream[List[partial_types.Metadata], List[types.Metadata]]:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      raw = self.__runtime.stream_function_sync(
+        "EnsureResults",
+        {
+          "results": results,
+          "output": output,
+        },
+        None,
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+
+      return baml_py.BamlSyncStream[List[partial_types.Metadata], List[types.Metadata]](
+        raw,
+        lambda x: cast(List[partial_types.Metadata], x.cast_to(types, types, partial_types, True)),
+        lambda x: cast(List[types.Metadata], x.cast_to(types, types, partial_types, False)),
+        self.__ctx_manager.get(),
+      )
     
     def ExtractArticle(
         self,

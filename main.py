@@ -1,23 +1,23 @@
-# https://docs.boundaryml.com/guide/installation-language/python
-import openai
-from baml_client import b
-from baml_client.types import CountryCapital
+from GetContent import GetContent
+from BuildSoup import BuildSoup
 
-client = openai.Client(
-    base_url="http://localhost:11434/v1",
-    api_key="ollama"
-)
+def main(url, names):
+    gc = GetContent(names, url)
+    res = gc.extract()
+    res_dicts = [metadata.model_dump() for metadata in res]
+    print(res_dicts)
+    bs = BuildSoup(url, gc)
+    bs.add_dynamic_methods(res_dicts)
+    for name in names:
+        method_name = name.replace(" ", "_").lower()
+        method = getattr(bs, method_name)
+        result = method()
+        if not len(result):
+            gc.retry()
+        else:
+            print(f"{name}: {method()}")
 
-response = client.chat.completions.create(
-    model="deepseek-r1",
-    messages=[{'role': 'user', 'content': 'What is the capital of France?'}],
-    temperature=0.7,
-)
-content = response.choices[0].message.content
-print(content.split('>')[2].strip())
-
-content = content.split('>')[-1].strip()
-country_info = b.ExtractCountryCapital(content)
-print(f"Country: {country_info.country}")
-print(f"Capital: {country_info.capital}")
-
+if __name__ == '__main__':
+    url = 'https://www.rottentomatoes.com/m/alien_romulus'
+    names = ['Movie Title', 'Tomatometer']
+    main(url, names)

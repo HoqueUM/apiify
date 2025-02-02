@@ -1,1 +1,0 @@
-dotenv.load_dotenv()
