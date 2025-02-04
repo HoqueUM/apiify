@@ -1,0 +1,1 @@
+from new_folder.dynamic_methods import dynamic_method
