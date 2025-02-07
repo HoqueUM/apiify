@@ -16,19 +16,23 @@ class GetContent:
     """
     Get the specified content from the given URL.
     """
-    def __init__(self, names, url):
+    def __init__(self, names, url, new_type=False):
         dotenv.load_dotenv()
         reset_baml_env_vars(dict(os.environ))
-        self.categories = [name.lower().replace(' ', '_') + '_html' for name in names]
+        self.categories = [name.lower().replace(' ', '_') + '_html' for name in list(names.keys())]
         self.names = names
         self.url = url
+        self.new_type = new_type
 
     def extract_content(self):
         print("Started...")
         tb = TypeBuilder()
         print("TypeBuilder created...")
-        for category in self.categories:
-            tb.PageData.add_property(category, tb.string()).description(f"HTML of {category}")
+        for key, val in self.names.items():
+            key = key.lower().replace(' ', '_') + '_html'
+            print(key)
+            print(val)
+            tb.PageData.add_property(key, tb.string()).description(f"String of {key}")
         
         ua = UserAgent().random
         response = requests.get(self.url, headers={'User-Agent': ua})
@@ -38,22 +42,22 @@ class GetContent:
         html = clean_html(html).strip()
 
         try:
-            res = b.ExtractPageData(self.names, html, {"tb": tb})
+            res = b.ExtractPageData(list(self.names.keys()), html, {"tb": tb})
             print("Done extracting page data...")
             result = {}    
             for category in self.categories:
                 method_result = getattr(res, category)
                 method_result = method_result.strip() 
-                result[category] = method_result
+                self.result = result[category] = method_result
             return result          
         except BamlError as e:
             print(e)
 
     def filter_output(self, output):
         print("TypeBuilder created...")
-        res = b.FilterPageData(self.names, output)
+        res = b.FilterPageData(list(self.names.keys()), output)
         res = b.EnsureResults(res, output)
-        if len(res) != len(self.names):
+        if len(res) != len(list(self.names.keys())):
             return self.retry()
         return res
     
@@ -67,7 +71,7 @@ class GetContent:
         for item in list(res.values()):
             output += item
         res = self.filter_output(output)
-        if len(res) != len(self.names):
+        if len(res) != len(list(self.names.keys())):
             return self.retry()
         return res
     

@@ -14,5 +14,8 @@ def home():
     key, value = get_tomatometer()
     result[key] = value
 
+    key, value = get_in_theaters()
+    result[key] = value
+
 
     return jsonify(result)
