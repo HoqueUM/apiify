@@ -8,13 +8,10 @@ app = Flask(__name__)
 def home():
     result = {}
 
-    key, value = get_movie_title()
+    key, value = get_website_title()
     result[key] = value
 
-    key, value = get_tomatometer()
-    result[key] = value
-
-    key, value = get_in_theaters()
+    key, value = get_content()
     result[key] = value
 
 

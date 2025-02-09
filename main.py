@@ -21,7 +21,7 @@ if __name__ == '__main__':
     - bool
     - list (this will be a special case, we will compback to it)
     """
-    url = 'https://www.rottentomatoes.com/m/heart_eyes'
+    url = 'https://example.com/'
     names = ['Movie Title', 'Tomatometer']
-    nems = {'Movie Title': 'string', 'Tomatometer': 'string', 'In Theaters': 'bool'}
+    nems = {'Webite Title': 'string', 'Content': 'string'}
     main(url, nems)

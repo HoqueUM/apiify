@@ -103,7 +103,10 @@ Target schema requirements (modify item dicts to match these):
 Return the full code with minimal changes - ONLY modify:
 1. item dictionary values (part/tag/content/attributes)
 2. Return tuple formatting to match schema
-Keep all other code EXACTLY as-is including function names and structure."""
+Keep all other code EXACTLY as-is including function names and structure.
+
+Output the final code as plain text. Do not wrap it with ```python``` or any other formatting.
+"""
     }
 ]
         response = client.chat.complete(
